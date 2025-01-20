@@ -1,8 +1,9 @@
-﻿#pragma region in your 
+﻿#pragma region HEAD
 
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <deque>
 
 #include "SimpleTimer.h"
 
@@ -16,21 +17,7 @@ template <typename T> void wl(T s) { std::cout << s << std::endl; }
 
 inline void ttsleep(float t) { this_thread::sleep_for(chrono::milliseconds((int)(t * 1000))); }
 
-#pragma endregion HEAD
-
-
-struct Gavka {
-    Gavka()                          { wl("+G"); }
-    Gavka(string name) : _name(name) { wl("+G"); call(); }
-    ~Gavka()                         { wl("-G"); }
-
-    void call() { w("Howdy, "); w(_name); wl("!"); }
-
-private:
-    string _name;
-
-};
-
+#pragma endregion 
 
 
 
@@ -41,28 +28,25 @@ int main() {
     SimpleTimer STimer;
 #pragma endregion main()
     
-    vector <Gavka*> Psy;
-    Psy.push_back(new Gavka("Aleksandr"));
-    Psy.push_back(new Gavka("Aleksey"));
-    Psy.push_back(new Gavka("Alesha"));
-    Psy.push_back(new Gavka("Anatoliy"));
+    deque <int> dq;
+    dq.push_back(5);
+    dq.push_front(8);
+    dq.push_back(1);
+    dq.push_front(4);
+
+    for (auto _ : dq) { w(_); w(" "); } wl();
+
+    int max = 0;
+    for (auto i = 0; i < dq.size() - 1; ++i) {
+        if (dq[i] > max) {
+            max = dq[i];
+            std::swap(dq[i], dq[dq.size() - 1]);
+            i = 0;
+        }
+    }
+
+    for (auto _ : dq) { w(_); w(" "); } wl();
     
-    wl();    
-    for (auto _ : Psy) _->call();
-    wl();
-
-    Psy.pop_back();
-    for (auto _ : Psy) _->call();
-    wl();
-
-    Psy.erase(Psy.cbegin() + 1);
-    for (auto _ : Psy) _->call();
-    wl();
-
-
-
-    Psy.clear();
-
 #pragma region }
     std::cout << std::endl << std::endl;
     return 0;

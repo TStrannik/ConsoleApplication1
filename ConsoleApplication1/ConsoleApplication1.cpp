@@ -3,7 +3,9 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-#include <deque>
+#include <mutex>
+#include <semaphore>
+#include <functional>
 
 #include "SimpleTimer.h"
 
@@ -20,6 +22,37 @@ inline void ttsleep(float t) { this_thread::sleep_for(chrono::milliseconds((int)
 #pragma endregion 
 
 
+template <typename T>
+class IndirectValue {
+    T* ptr;
+public:
+
+    explicit IndirectValue(T* ptr) : ptr(ptr) {}
+    ~IndirectValue() noexcept { if (ptr) delete ptr; }
+
+    IndirectValue(IndirectValue const& other) : ptr(other.ptr ? new T(*other.ptr) : nullptr) {}
+
+    IndirectValue& operator=(IndirectValue const& other) {
+        IndirectValue temp(other);
+        std::swap(ptr, temp.ptr);
+        return *this;
+    }
+    
+
+
+    IndirectValue(IndirectValue&& other) noexcept : ptr(other.ptr) {
+        other.ptr = nullptr;
+    }
+    IndirectValue& operator=(IndirectValue&& other) noexcept {
+        IndirectValue temp(std::move(other));
+        std::swap(ptr, temp.ptr);
+        return *this;
+    }
+
+};
+
+
+
 
 #pragma region int
 int main() {
@@ -27,26 +60,9 @@ int main() {
     system("color 70\n cls\n");
     SimpleTimer STimer;
 #pragma endregion main()
+
     
-    deque <int> dq;
-    dq.push_back(5);
-    dq.push_front(8);
-    dq.push_back(1);
-    dq.push_front(4);
 
-    for (auto _ : dq) { w(_); w(" "); } wl();
-
-    int max = 0;
-    for (auto i = 0; i < dq.size() - 1; ++i) {
-        if (dq[i] > max) {
-            max = dq[i];
-            std::swap(dq[i], dq[dq.size() - 1]);
-            i = 0;
-        }
-    }
-
-    for (auto _ : dq) { w(_); w(" "); } wl();
-    
 #pragma region }
     std::cout << std::endl << std::endl;
     return 0;

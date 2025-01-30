@@ -7,21 +7,7 @@ using namespace std;
 int          ARR::_counter = 0; 
 int          ARR::_max_id  = 0;
 
-ARR&         ARR::operator = (ARR& other) {
-
-    _length = other._length;
-    _ar = new int[_length];
-    for (size_t i = 0; i < _length; i++)
-        _ar[i] = other._ar[i];
-
-    _id = ++_max_id;
-    _counter++;
-
-    return *this;
-
-}
-
-void         ARR::fill_from(ARR& other) {
+void         ARR::_fill_from(ARR& other) {
 
     _length = other._length;
     _ar = new int[_length];
@@ -32,7 +18,7 @@ void         ARR::fill_from(ARR& other) {
     _counter++;
 
 }
-void         ARR::fill_zero() {
+void         ARR::_fill_zero() {
 
     _length = 5;
     _ar = new int[_length];
@@ -42,9 +28,12 @@ void         ARR::fill_zero() {
     _counter++;
 
 }
-void         ARR::fill_random(unsigned int length) {
+void         ARR::_fill_random(unsigned int length) {
 
-    srand(time(NULL));
+        //  srand(time(NULL));
+    auto now = std::chrono::high_resolution_clock::now();
+    std::mt19937 random_generator(now.time_since_epoch().count());
+
     _length = length;
 
     vector <int> base;
@@ -53,7 +42,8 @@ void         ARR::fill_random(unsigned int length) {
     _ar = new int[_length];
     int r = 0;
     for (size_t i = 0; i < _length; i++) {
-        r = rand() % base.size();
+            //r = rand() % base.size();
+        r = random_generator() % base.size();
         _ar[i] = base[r];
         base.erase(base.begin() + r);
     }
@@ -65,7 +55,8 @@ void         ARR::fill_random(unsigned int length) {
 
 void         ARR::destruct() {
 
-    if (_ar != nullptr) delete[] _ar;
+    if (_ar != nullptr)
+        delete[] _ar;
     _counter--;
 
 }
@@ -99,6 +90,11 @@ unsigned int ARR::get_size() {
     return _length;
 
 }
+unsigned int ARR::get_counter() {
+
+    return ARR::_counter;
+
+}
 int          ARR::search_pos(int value) {
 
     for (size_t i = 0; i < _length; i++)
@@ -119,6 +115,21 @@ void         ARR::search_set(int value) {
 
 }
 
+ARR&         ARR::operator =  (ARR& other) {
+
+    if (_ar != nullptr) delete[] _ar;
+
+    _length = other._length;
+    _ar = new int[_length];
+    for (size_t i = 0; i < _length; i++)
+        _ar[i] = other._ar[i];
+
+    _id = ++_max_id;
+    _counter++;
+
+    return *this;
+
+}
 void         ARR::operator += (int next) {
 
     int* tmp = new int[_length];
@@ -131,4 +142,49 @@ void         ARR::operator += (int next) {
     _ar[_length - 1] = next;
 
     delete[] tmp;
+}
+ARR          ARR::operator +  (ARR& other) {
+
+    int L = _length, l = _length;
+    int* A = _ar; int* a = _ar;
+
+    L = (_length > other._length) ? _length : other._length;
+    l = (_length > other._length) ? other._length : _length;
+    A = (_length > other._length) ? _ar : other._ar;
+    a = (_length > other._length) ? other._ar : _ar;
+
+    ARR copy(L);
+    for (size_t i = 0; i < l; i++) copy._ar[i] = A[i] + a[i];
+    for (size_t i = l; i < L; i++) copy._ar[i] = A[i];
+
+    A = nullptr; a = nullptr;
+    delete[]  A; delete[]  a;
+
+    return copy;
+
+}
+void         ARR::operator -  (int del) {
+
+    vector <int> tmp;
+
+    int l = _length;
+    for (int i = 0; i < _length; ++i) {
+        if (_ar[i] != del) tmp.push_back(_ar[i]);
+        else               l--;
+    }
+    
+    if (_ar != nullptr) delete[] _ar;
+    _length = l;
+    _ar = new int[_length];
+
+    for (int i = 0; i < _length; ++i) _ar[i] = tmp[i];
+
+}
+bool         ARR::operator == (ARR& other) {
+
+    for (size_t i = 0; i < _length; i++)
+        if (_ar[i] != other._ar[i]) return 0;
+    
+    return 1;
+
 }

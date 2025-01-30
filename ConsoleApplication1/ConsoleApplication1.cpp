@@ -11,18 +11,13 @@ int main() {
      SimpleTimer STimer;
 
 #pragma endregion main() {
+    
+    ARR ar1(3);
+    ARR ar2(3);
+    ar1.info();
+    ar2.info();
 
     
-    ARR ar1(10);
-    ar1.info();
-   
-    ar1 += 111;
-    ar1 += 222;
-    ar1 += 333;
-    ar1.info();
-
-    
-
 #pragma region }
     //system("pause");
     return 0;

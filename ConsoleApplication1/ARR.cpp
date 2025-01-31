@@ -188,3 +188,8 @@ bool         ARR::operator == (ARR& other) {
     return 1;
 
 }
+int          ARR::operator [] (int index) {
+
+    return _ar[index];
+
+}

@@ -18,6 +18,7 @@ struct ARR {
     ARR  operator +  (ARR& othr);
     void operator -  (int del);
     bool operator == (ARR& other);
+    int  operator [] (int index);
 
     void         destruct();
     void         reset();

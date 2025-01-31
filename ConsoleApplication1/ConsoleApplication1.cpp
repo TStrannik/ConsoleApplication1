@@ -12,11 +12,13 @@ int main() {
 
 #pragma endregion main() {
     
-    ARR ar1(3);
-    ARR ar2(3);
+    ARR ar1(10);
+    ARR ar2(20);
     ar1.info();
     ar2.info();
 
+    wl(ar1[2]);
+    wl(ar2[9]);
     
 #pragma region }
     //system("pause");

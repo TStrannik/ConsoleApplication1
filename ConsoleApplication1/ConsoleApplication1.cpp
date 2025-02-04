@@ -13,14 +13,16 @@ int main() {
 
 #pragma endregion main() {
 
-    //Matrix hoyda;
-    //hoyda.print(); 
+     Matrix hoyda(5, 5);
+     hoyda.print();
     
-    
-     ARR JoJo;
+     
+
+     /*ARR JoJo;
 
      JoJo.get_form_file("arr.in");
-     JoJo.info();
+     JoJo.info();*/
+
 
 
 #pragma region }

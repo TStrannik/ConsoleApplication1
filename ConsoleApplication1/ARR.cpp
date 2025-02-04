@@ -182,7 +182,8 @@ void         ARR::operator += (int next) {
     delete[] _ar;
     _ar = new int[++_length];
 
-    for (size_t i = 0; i < _length - 1; i++) _ar[i] = tmp[i];
+    for (size_t i = 0; i < _length - 1; i++)
+        _ar[i] = tmp[i];
     _ar[_length - 1] = next;
 
     delete[] tmp;

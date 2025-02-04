@@ -1,5 +1,6 @@
 ﻿#include "SimpleTimer.h"
 #include "ARR.h"
+#include <array>
 
 
 
@@ -11,15 +12,17 @@ int main() {
      SimpleTimer STimer;
 
 #pragma endregion main() {
-    
-    ARR ar1(10);
-    ARR ar2(20);
-    ar1.info();
-    ar2.info();
 
-    wl(ar1[2]);
-    wl(ar2[9]);
+    //Matrix hoyda;
+    //hoyda.print(); 
     
+    
+     ARR JoJo;
+
+     JoJo.get_form_file("arr.in");
+     JoJo.info();
+
+
 #pragma region }
     //system("pause");
     return 0;

@@ -20,7 +20,7 @@ void         ARR::_fill_from(ARR& other) {
 }
 void         ARR::_fill_zero() {
 
-    _length = 5;
+    _length = 1;
     _ar = new int[_length];
     for (size_t i = 0; i < _length; ++i) _ar[i] = 0;
 
@@ -114,6 +114,50 @@ void         ARR::search_set(int value) {
     wl();
 
 }
+bool         ARR::get_form_file(std::string filename) {
+    ifstream file(filename);
+
+    if (file.is_open()) {
+        string str;
+        string* next = new string[0];
+        
+        int c = 0;
+        int i = 0;
+        while (getline(file, str)) {
+
+            next = new string[str.length()];
+
+            while (i < str.length()) {
+                if (str[i] != ' ')
+                    next[c] += str[i];
+                else
+                    c++;
+
+                i++;
+            }
+        }
+
+        if (str.length() == 0) return false;
+
+        int l = c + 1;
+        if (l < 0) return false;
+        _length = l;
+
+        if (_ar != nullptr) delete[] _ar;
+        _ar = new int[_length];
+
+        for (size_t i = 0; i < _length; ++i)
+            _ar[i] = atoi(next[i].c_str());
+
+    } else {
+        file.close();
+        return false;
+    }
+
+    file.close();
+
+    return true;
+}
 
 ARR&         ARR::operator =  (ARR& other) {
 
@@ -193,3 +237,12 @@ int          ARR::operator [] (int index) {
     return _ar[index];
 
 }
+
+
+
+
+//bool         Matrix::get_form_file(std::string filename) {
+//    ofstream file("arr.in");
+//
+//    return true;
+//}

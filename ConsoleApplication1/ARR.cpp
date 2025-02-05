@@ -30,7 +30,7 @@ void         ARR::_fill_zero() {
 }
 void         ARR::_fill_random(unsigned int length) {
 
-        //  srand(time(NULL));
+            //  srand(time(NULL));
     auto now = std::chrono::high_resolution_clock::now();
     std::mt19937 random_generator(now.time_since_epoch().count());
 
@@ -39,6 +39,7 @@ void         ARR::_fill_random(unsigned int length) {
     vector <int> base;
     for (size_t i = 1; i <= _length; i++) base.push_back(i);
 
+            //if (_ar != nullptr) delete[] _ar;
     _ar = new int[_length];
     int r = 0;
     for (size_t i = 0; i < _length; i++) {
@@ -114,49 +115,42 @@ void         ARR::search_set(int value) {
     wl();
 
 }
-bool         ARR::get_form_file(std::string filename) {
+bool         ARR::get_from_file(std::string filename) {
+
     ifstream file(filename);
 
-    if (file.is_open()) {
-        string str;
-        string* next = new string[0];
-        
-        int c = 0;
-        int i = 0;
-        while (getline(file, str)) {
+    if (!file.is_open()) return false;
 
-            next = new string[str.length()];
+    string str;
+    vector <string> next;
+    
+    int i = 0;
+    
+    while (getline(file, str)) {
+        next.push_back("");
+    
+        while (i < str.length()) {
+            if (str[i] != ' ') next.back() += str[i];
+            else               next.push_back("");
 
-            while (i < str.length()) {
-                if (str[i] != ' ')
-                    next[c] += str[i];
-                else
-                    c++;
-
-                i++;
-            }
+            i++;
         }
-
-        if (str.length() == 0) return false;
-
-        int l = c + 1;
-        if (l < 0) return false;
-        _length = l;
-
-        if (_ar != nullptr) delete[] _ar;
-        _ar = new int[_length];
-
-        for (size_t i = 0; i < _length; ++i)
-            _ar[i] = atoi(next[i].c_str());
-
-    } else {
-        file.close();
-        return false;
     }
+    
+    if (str.length() == 0) return false;
+    if (next.size() < 0)   return false;
+
+    _length = next.size();
+    
+    if (_ar != nullptr) delete[] _ar; _ar = new int[_length];
+    for (size_t i = 0; i < _length; ++i) _ar[i] = atoi(next[i].c_str());            
+
+    
 
     file.close();
 
     return true;
+
 }
 
 ARR&         ARR::operator =  (ARR& other) {
@@ -240,10 +234,37 @@ int          ARR::operator [] (int index) {
 }
 
 
+void         Matrix::_fill_random(unsigned int m, unsigned int n) {
+
+    _matrix = new ARR[_m]{ NULL };
+    for (size_t i = 0; i < _m; i++)
+        _matrix[i]._fill_random(_n);
+
+}
+void         Matrix::destruct() {
+
+    if (_matrix != nullptr) delete[] _matrix;
+
+}
+void         Matrix::print() {
+
+    for (size_t i = 0; i < _m; i++) {
+        _matrix[i].print();
+        wl(); wl();
+    }
+
+}
+bool         Matrix::get_from_file(std::string filename) {
+
+    ifstream file(filename);
+
+    
+    
 
 
-//bool         Matrix::get_form_file(std::string filename) {
-//    ofstream file("arr.in");
-//
-//    return true;
-//}
+
+    file.close();
+
+    return true;
+
+}
